@@ -217,6 +217,37 @@ plt.show()
 
 
 
+#Calculating the Risk Metrics
+
+#Calculate the rmse and rse
+
+#rmse = root mean square error +> Sq root(Avg((A-P)^2))
+#mse = mean square error Avg((A-P)^2)
+
+from sklearn.metric import mean_squared_error
+import numpy as np
+
+#Calculate mse
+
+mse = mean_squared_error(df_result["Actual"], df_result["Predicted"])
+rmse = np.sqrt(rmse)
+print(rmse, mse)
+
+#Interpreting the Summary
+
+#R-squared -> 0.993, Your model explains 99.3% of the variation in the stock price, shows that it is a pretty good model, higher the btter the model
+#Adjusted R-squared -> at the end we only had two variables to predict y, lets say two more, r squared may increase but adjusted r square will likely decrease, it penalizes insignifcant variables, but r squared does not penalize it
+#Number of Observations -> How many datapoints the model was trained on
+#Df model -> how many independent variables there are in the model
+#Df  residuals = Number of observations - Df model - 1
+#P-value => less that 0.05, it is signifcant if it is greater than 0.05 it is insignifucant, thus drop the vairable
+#Coefficient -> 0.46682 for apple, interpretation, if aaple price yesterday increases by 1 unit then the target vaiable will increase by 0.4682 units keeping all of the other variables constant (ceteris paribus)
+#Durbin Watson -> p-value is greater than or less that 0.05, it tells you about about autocoorelation between the residuals
+#Why to keep p-value as 0.05, 95% confidence interval, , 0.05 is signifccant, greater than 0.05 insignificant
+#Standard Error -> Measure of How precise your coefficient estimate is, if you have lower std error, your coefficient estimate is relaiable and vice versa
+#Helps to calulate the t-statistics bar -> Coefficent/standard error, high absolute t statisticas
+#Aim is > 2 or < -2, if it statistic is high then the variable is statistically significant
+
 
 
 

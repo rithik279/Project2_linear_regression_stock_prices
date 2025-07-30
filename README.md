@@ -1,6 +1,8 @@
-# QUANT PROJECT 2: LINEAR REGRESSION MODELING FOR STOCK PRICE PREDICTION
+# QUANT PROJECT 2: REGRESSION MODELING FOR STOCK PRICE PREDICTION
 
-This project builds a linear regression model to predict the next-day closing price of Apple Inc. (AAPL) using historical market data. It includes feature engineering with technical indicators, model training, diagnostics for key regression assumptions, and a forecasting exercise on 2025 data.
+This project applies and compares multiple regression models to predict the next-day closing price of Apple Inc. (AAPL) using historical market data. Models include Ordinary Least Squares (OLS), Ridge Regression, Lasso Regression, and Elastic Net Regression.
+
+The full pipeline includes data collection, feature engineering, regression modeling, statistical diagnostics, and forward testing on future data.
 
 ---
 
@@ -8,87 +10,146 @@ This project builds a linear regression model to predict the next-day closing pr
 
 Predict the next-day closing price of AAPL stock using lagged values and market indices.
 
-The model is constructed using Ordinary Least Squares (OLS) and evaluated against five core assumptions of linear regression to ensure statistical validity.
+The project begins with OLS regression and extends to regularized models (Ridge, Lasso, ElasticNet) to evaluate improvements in predictive performance and model robustness.
 
 ---
-## Setup Instructions
 
-# ```bash
+## SETUP INSTRUCTIONS
+
+## ```bash
 git clone https://github.com/rithik279/Project2_linear_regression_stock_prices
-cd rithik279/Project2_linear_regression_stock_prices
+cd Project2_linear_regression_stock_prices
 pip install -r requirements.txt
 
-## PROJECT PIPELINE
+PROJECT PIPELINE
 
-### 1. DATA COLLECTION
-- Source: Yahoo Finance
-- Tickers: AAPL, AMZN, MSFT, QQQ, ^GSPC
-- Range: 2020-01-01 to 2024-12-31 (training), 2025-01-01 to 2025-07-29 (testing)
+## 1. DATA COLLECTION
+Source: Yahoo Finance via yfinance
 
-### 2. FEATURE ENGINEERING
-- Lagged price features: (t-1) values for all tickers
-- Moving average features (MA-5)
-- Target: AAPL price shifted by -1 (i.e., next-day price)
+Tickers: AAPL, AMZN, MSFT, QQQ, ^GSPC
 
-### 3. MODELING
-- Model: statsmodels.OLS()
-- Predictors: AAPL(t-1), ^GSPC(t-1)
-- Output: Regression coefficients, p-values, R², and full statistical summary
+Range: 2020-01-01 to 2024-12-31 (training), 2025-01-01 to 2025-07-29 (testing)
 
-### 4. PERFORMANCE EVALUATION
-- Compare predicted vs. actual prices visually using line plots
-- Check key assumptions using diagnostics:
-  - Linearity: Pair plots
-  - Homoscedasticity: Residual vs. Fitted scatter
-  - Multicollinearity: VIF values
-  - Normality of residuals: Histogram and QQ plot
-  - Autocorrelation: Durbin-Watson test
+## 2. FEATURE ENGINEERING
+Lagged price features: (t-1) values for all tickers
 
-### 5. TESTING ON FUTURE DATA
-- New data range: January–July 2025
-- Same features engineered
-- Prediction performed using the trained model
+Moving average features: 5-day MA for each ticker
 
----
+Target variable: AAPL closing price shifted by -1 (next-day)
+
+## 3. MODELING
+OLS Regression using statsmodels.OLS
+
+Predictors: AAPL(t-1), ^GSPC(t-1)
+
+Output: Coefficients, p-values, R², full statistical summary
+
+Lasso Regression
+
+Includes L1 regularization to perform feature selection
+
+Ridge Regression
+
+Includes L2 regularization to mitigate multicollinearity
+
+Elastic Net Regression
+
+Combines L1 and L2 penalties to balance sparsity and stability
+
+Each model is trained using identical features and evaluated using R², mean squared error, and visual comparisons of predicted vs. actual prices.
+
+## 4. PERFORMANCE EVALUATION
+Prediction accuracy metrics: R², Mean Squared Error
+
+Visual diagnostics:
+
+Actual vs. Predicted Price Plot
+
+Residual vs. Fitted Scatter Plot
+
+Histogram and QQ plot of residuals
+
+Statistical checks:
+
+Linearity: Pair plots
+
+Homoscedasticity
+
+Multicollinearity: Variance Inflation Factor (VIF)
+
+Normality: QQ plot and histogram
+
+Autocorrelation: Durbin-Watson statistic
+
+## 5. TESTING ON FUTURE DATA
+Forward testing on January–July 2025
+
+Models applied to new data with consistent feature engineering
+
+Predictions compared visually and numerically
 
 ## VISUALIZATIONS
+Line plots: Actual vs. Predicted Prices (all models)
 
-- Actual vs. Predicted Line Charts
-- Residual vs. Fitted Scatterplots
-- Histogram and QQ Plot of Residuals
-- Seaborn Pairplots
+Residual diagnostics (scatter, histogram, QQ plot)
 
----
+Pair plots of features
 
-## KEY LEARNINGS
+Coefficient visualizations (Lasso, Ridge, ElasticNet)
 
-- Linear regression offers transparency and interpretability, but struggles with non-linear patterns in stock data.
-- While assumptions were reasonably satisfied, the predictive accuracy remains limited.
-- For production-grade systems, machine learning models (e.g., XGBoost, LSTM, Random Forests) often outperform traditional regressions in capturing the complex dynamics of financial markets.
+## KEY FINDINGS
+OLS provides transparency but is sensitive to multicollinearity and overfitting.
 
----
+Lasso eliminates weak predictors through L1 penalty, offering a sparse model.
+
+Ridge stabilizes coefficient estimates where predictors are correlated.
+
+ElasticNet balances sparsity and regularization strength, often outperforming Lasso and Ridge when tuned properly.
+
+Regularized models demonstrated better generalization on unseen data in 2025 compared to OLS.
 
 ## REQUIREMENTS
+All libraries can be installed via:
 
+bash
+Copy
+Edit
+pip install -r requirements.txt
+Major dependencies:
 
-pip install yfinance statsmodels seaborn matplotlib pandas
+yfinance
+
+pandas
+
+matplotlib
+
+seaborn
+
+statsmodels
+
+scikit-learn
+
+numpy
 
 ## FILES INCLUDED
-notebooks/linear_model_dev.ipynb – Full code and analysis
+notebooks/linear_model_dev.ipynb: Jupyter notebook with full analysis and model comparisons
 
-README.md – Project overview and methodology
+logic/: Python modules for each regression model and data preprocessing
+
+requirements.txt: Python dependencies
+
+README.md: Project overview and documentation
 
 ## AUTHOR NOTES
-This project is part of a broader quant research portfolio to build intuition for model diagnostics, technical indicators, and statistical rigor in finance. It is also designed to lay the foundation for more advanced ML-based strategies in future builds.
+This project is part of a broader quant research effort to build statistical modeling intuition, compare regression techniques, and develop reproducible workflows for financial prediction tasks. It also lays the groundwork for future builds incorporating more advanced models and deployment methods.
 
 ## TO-DO / NEXT STEPS
-Add rolling standard deviation (volatility) as a feature
+Add rolling standard deviation (volatility) as a new feature
 
-Introduce additional market indicators (VIX, Volume)
+Include additional market indicators (e.g., VIX, trading volume)
 
-Build and compare tree-based regressors (Random Forest, Gradient Boost)
+Expand to tree-based models (e.g., Random Forest, Gradient Boosting)
 
-Deploy model via Streamlit for interactive predictions
+Deploy via Streamlit or FastAPI for interactive predictions
 
 © 2025 Rithik Singh — Quant Finance Project Series
-

@@ -10,6 +10,20 @@
 #In this specifc model, we are aiming to predict AAPL's price for the next day
 
 import yfinance as yf
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+import statsmodels.api as sm
+from statsmodels.stats.stattools import durbin_watson
+import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error,r2_score
+
+
+
+
+
 tickers = ["AAPL", "AMZN","MSFT",'QQQ','^GSPC']
 df = yf.download(tickers,start = '2020-01-01', end = '2024-12-31')["Close"]
 print(df)
@@ -39,7 +53,7 @@ print(df)
 df['Target'] = df['AAPL'].shift(-1)
 df = df.dropna()
 
-import statsmodels.api as sm
+
 
 #Set X & Y Variables For The Linear Regression Model - Ordinary least squares
 x = df[['AAPL(t-1)', '^GSPC(t-1)' ]] #Removed AAPL MA_5 To meet the linear collinearity condition
@@ -54,14 +68,14 @@ model = sm.OLS(y,x_const).fit()
 
 print(model.summary())
 
-import pandas as pd
+
 df_train_predict = pd.DataFrame()
 df_train_predict['Actual'] = df['Target']
 df_train_predict['Predicted'] = model.predict(x_const)
 print(df_train_predict)
 
 #Plot between Actual VS Predicted Value
-import matplotlib.pyplot as plt
+
 plt.figure(figsize = (14,6))
 plt.plot(df_train_predict.index, df_train_predict['Actual'], label = 'Actual', color = 'black')
 plt.plot(df_train_predict.index, df_train_predict['Predicted'], label = 'Predicted', color = 'red')
@@ -92,7 +106,7 @@ print(df)
 
 ## different scatterplots or just use seaborn
 
-import seaborn as sns
+
 
 print(sns.pairplot(df))
 
@@ -122,7 +136,7 @@ plt.show()
 #VIF > 10 => Strong Multicollinearity
 
 
-from statsmodels.stats.outliers_influence import variance_inflation_factor
+
 
 vif = pd.DataFrame()
 vif["Features"] = x_const.columns
@@ -140,7 +154,7 @@ plt.show()
 
 #QQ Plot is easier to tell if it is a normal distribution, used for testing the normailty of residuals
 
-import statsmodels.api as sm
+
 
 sm.qqplot(residual, line = "45", fit = True)
 plt.title("QQ Plot to Test Normality")
@@ -148,7 +162,7 @@ plt.show()
 
 #Test 5: test for Auto Correlation of Residuals: Durbin Watson Test
 
-from statsmodels.stats.stattools import durbin_watson
+
 
 #Just rmbr the function of your code and then chatgpt and google to help write the specifc functions and syntax, just need to know what you need to do and why
 
@@ -197,7 +211,7 @@ print(df_result.head())
 
 #Plot between Actual vs Predicted Value
 
-import matplotlib.pyplot as plt
+
 
 plt.figure(figsize = (14,6))
 plt.plot(df_result.index, df_result["Actual"], label ="Actual",color = "black")
@@ -224,14 +238,20 @@ plt.show()
 #rmse = root mean square error +> Sq root(Avg((A-P)^2))
 #mse = mean square error Avg((A-P)^2)
 
-from sklearn.metric import mean_squared_error
-import numpy as np
+
 
 #Calculate mse
 
-mse = mean_squared_error(df_result["Actual"], df_result["Predicted"])
-rmse = np.sqrt(rmse)
-print(rmse, mse)
+
+
+r2 = r2_score(df_result["Actual"],df_result["Predicted"])
+print("R squared = ", r2)
+
+mse = mean_squared_error(df_result["Actual"],df_result["Predicted"])
+print("mse = ", mse)
+
+rmse = np.sqrt(mse)
+print("rmse = ", rmse)
 
 #Interpreting the Summary
 

@@ -11,6 +11,12 @@ Predict the next-day closing price of AAPL stock using lagged values and market 
 The model is constructed using Ordinary Least Squares (OLS) and evaluated against five core assumptions of linear regression to ensure statistical validity.
 
 ---
+## Setup Instructions
+
+# ```bash
+git clone https://github.com/rithik279/Project2_linear_regression_stock_prices
+cd rithik279/Project2_linear_regression_stock_prices
+pip install -r requirements.txt
 
 ## PROJECT PIPELINE
 
